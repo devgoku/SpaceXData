@@ -17,22 +17,18 @@ p b{
 button {
     float: left;
     margin: 5px auto;
-    background-color: rgb(170, 228, 192);
-    border-color: rgb(170, 228, 192);
+    background-color: #c5e09b;
     width: 40%;
     padding: 5px;
     border-radius: 5px;
     font-weight: bold;
+    border: none;
 }
 
-button:focus, button:active, button:hover{
-    background-color: rgb(59, 212, 12); 
-    border-color: rgb(59, 212, 12);   
-}
 
 .activeButton{
-    background-color: rgb(59, 212, 12);
-    border-color: rgb(59, 212, 12); 
+    background-color:#79ac28;
+    border-color: #79ac28 
 }
 
 .clearFliter{

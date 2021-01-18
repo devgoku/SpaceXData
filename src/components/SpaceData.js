@@ -11,7 +11,6 @@ const RocketLaunch = () => {
   const [landSuccess, setLandSuccess] = useState(null);
 
 
-
   let filterQuery = '';
   if(launchYear){
     filterQuery +='&launch_year='+launchYear;
@@ -19,15 +18,21 @@ const RocketLaunch = () => {
   if(launchSuccess){
         filterQuery +='&launch_success=true';
    } 
+   if(launchSuccess === false){
+    filterQuery +='&launch_success=false';
+   }
    if(landSuccess){
        filterQuery += '&land_success=true';
    }
+   if(landSuccess === false){
+    filterQuery += '&land_success=false';
+}
+
 
   useEffect(() => {
         fetch(API_URL+filterQuery)
           .then((response) => response.json())
           .then((data) => {
-              console.log(data);
             setLaunchData(data);
           })
           .catch((error) => {
@@ -47,14 +52,13 @@ const RocketLaunch = () => {
   const yearFilter = yearList.map((year, index) => {
     return (       
       
-      <button value={year} onClick={() => {setLaunchYear(year)}} key={index} className={year === launchYear ? 'activeButton' : ''} >
+      <button value={year} onClick={() => {launchYear === year ? setLaunchYear(null) : setLaunchYear(year) }} key={index} className={year === launchYear ? 'activeButton' : ''} >
         {year} 
       </button>
       
     );
   });
 
-  //console.log("launch data", launchData);
   const dataColumns =
     launchData &&
     launchData.map((val, index) => {
@@ -84,20 +88,22 @@ const RocketLaunch = () => {
               </p>
               <p>
                 <b>Successful Launch: </b>
-                {val.launch_success ? "true" : "false"}
+                {val.launch_success === true && "true"}
+                {val.launch_success === false && "false"}
+                {val.launch_success === null && "Not available"}
               </p>
               <p>
                 <b>Successful Landing: </b>
-                {val.rocket.first_stage.cores[0].land_success
-                  ? "true"
-                  : "false"}
+                {val.rocket.first_stage.cores[0].land_success === true && "true"}
+                {val.rocket.first_stage.cores[0].land_success === false && "false"}
+                {val.rocket.first_stage.cores[0].land_success === null && "Not available"}
+              
               </p>
             </div>
           </div>
         </div>
       );
     });
-
 
   return (
     <div className="container">
@@ -111,13 +117,13 @@ const RocketLaunch = () => {
                 <p>{yearFilter}</p>
               <h3> Successful Launch</h3>
               <p>
-                <button onClick={() => { setLaunchSuccess(true)} }  className={ launchSuccess ? 'activeButton' : '' }>True</button>
-                <button onClick={() => { setLaunchSuccess(false)}} className={ launchSuccess === false ? 'activeButton' : '' }>False</button>
+                <button onClick={() => { launchSuccess === true ? setLaunchSuccess(null) : setLaunchSuccess(true) } }  className={ launchSuccess ? 'activeButton' : '' }>True</button>
+                <button onClick={() => { launchSuccess === false ? setLaunchSuccess(null) : setLaunchSuccess(false);  }} className={ launchSuccess === false ? 'activeButton' : '' }>False</button>
               </p>
               <h3> Successful Landing</h3>
               <p>
-                <button onClick={() => { setLandSuccess(true)}} className={ landSuccess ? 'activeButton' : '' }>True</button>
-                <button onClick={() => { setLandSuccess(false)}} className={ landSuccess === false ? 'activeButton' : '' }>False</button>
+                <button onClick={() => { landSuccess === true ? setLandSuccess(null) : setLandSuccess(true) }} className={ landSuccess ? 'activeButton' : '' }>True</button>
+                <button onClick={() => { landSuccess === false ? setLandSuccess(null) : setLandSuccess(false); }} className={ landSuccess === false ? 'activeButton' : '' }>False</button>
               </p>
             </div>
           </div>
@@ -126,7 +132,7 @@ const RocketLaunch = () => {
       <div className="dataRow">
           {dataColumns && dataColumns.length >0 ? dataColumns : "No records found"}
           <p className="devInfo"> <b>Developed by:</b> Abhishek Singh</p>
-          </div>
+          </div>   
     </div>
   );
 };
